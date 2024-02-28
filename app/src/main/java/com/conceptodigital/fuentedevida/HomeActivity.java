@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.conceptodigital.fuentedevida.cobranza.CobranzaFragment;
+import com.conceptodigital.fuentedevida.services.ItemServiceFragment;
 import com.conceptodigital.fuentedevida.users.UsersFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -34,6 +35,8 @@ public class HomeActivity extends AppCompatActivity {
                 selectedFragment = new CobranzaFragment();
             else if (item.getItemId() == R.id.item_usuarios)
                 selectedFragment = new UsersFragment();
+            else if(item.getItemId() == R.id.item_servicio)
+                selectedFragment = new ItemServiceFragment();
 
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
 

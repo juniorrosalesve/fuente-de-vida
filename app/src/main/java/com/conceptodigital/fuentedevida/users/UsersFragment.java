@@ -9,19 +9,26 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.conceptodigital.fuentedevida.R;
 import com.conceptodigital.fuentedevida.helpers.Url;
+import com.google.android.material.sidesheet.SideSheetDialog;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * A fragment representing a list of Items.
@@ -68,12 +75,9 @@ public class UsersFragment extends Fragment {
                                 {
                                     JSONObject userObject = getUsers.getJSONObject(i);
                                     String id = userObject.getString("id");
-                                    String name = userObject.getString("name");
-                                    String email = userObject.getString("email");
+                                    String name = userObject.getString("nombre");
+                                    String email = userObject.getString("correo");
                                     int access = 0; // default value
-                                    if (userObject.has("access") && !userObject.isNull("access")) {
-                                        access = Integer.parseInt(userObject.getString("access"));
-                                    }
                                     users.add(new UserItem(id, name, email, access));
                                 }
                                 recyclerView.setAdapter(new MyUsersRecyclerViewAdapter(users));
@@ -95,6 +99,80 @@ public class UsersFragment extends Fragment {
                         loading.dismiss();
                     }
                 });
+            }
+        });
+
+        Button addMotorizado =   view.findViewById(R.id.addMotorizado);
+        addMotorizado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SideSheetDialog sideSheetDialog = new SideSheetDialog(requireActivity());
+                sideSheetDialog.setContentView(R.layout.side_add_motorizado);
+
+                // Obtén una referencia al botón dentro del diálogo
+                Button btnSubmit = sideSheetDialog.findViewById(R.id.btnSubmit);
+                TextInputEditText[] inputs   =   new TextInputEditText[] {
+                        sideSheetDialog.findViewById(R.id.nombre),
+                        sideSheetDialog.findViewById(R.id.correo),
+                        sideSheetDialog.findViewById(R.id.telefono),
+                        sideSheetDialog.findViewById(R.id.direccion),
+                        sideSheetDialog.findViewById(R.id.placa)
+                };
+
+                // Establece un OnClickListener para el botón
+                btnSubmit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        loading.show();
+                        for(int i = 0; i < inputs.length; i++)
+                        {
+                            if(inputs[i].getText().toString().isEmpty())
+                            {
+                                inputs[i].setError("Este campo es requerido");
+                                loading.dismiss();
+                                return;
+                            }
+                        }
+                        HashMap<String, String> params = new HashMap<>();
+                        params.put("nombre", inputs[0].getText().toString());
+                        params.put("correo", inputs[1].getText().toString());
+                        params.put("telefono", inputs[2].getText().toString());
+                        params.put("direccion", inputs[3].getText().toString());
+                        params.put("placa", inputs[4].getText().toString());
+                        url.sendPostRequest("/motorizado/add", params, new Url.MyCallback() {
+                            @Override
+                            public void onSuccess(String result) {
+                                String[] response   =   url.responseText(result);
+                                requireActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        loading.dismiss();
+                                        if(response[0].equals("success"))
+                                        {
+                                            users.add(new UserItem(response[1], inputs[0].getText().toString(), inputs[1].getText().toString(), 0));
+                                            recyclerView.getAdapter().notifyDataSetChanged();
+                                            sideSheetDialog.dismiss();
+                                        }
+                                        Toast.makeText(getContext(), response[1], Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onError(String error) {
+                                Log.e(TAG, error);
+                                requireActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        loading.dismiss();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+
+                sideSheetDialog.show();
             }
         });
 

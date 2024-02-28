@@ -2,33 +2,35 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
-    android:name="com.conceptodigital.fuentedevida.users.UsersFragment"
+    android:name="com.conceptodigital.fuentedevida.services.ItemServiceFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".users.UsersFragment">
+    tools:context=".services.ItemServiceFragment">
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:textSize="21sp"
-        android:text="Usuarios"/>
-
-    <Button
-        android:id="@+id/addMotorizado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Agregar"
-        android:layout_marginTop="5dp"
-        android:layout_alignParentEnd="true"/>
+        android:layout_marginTop="14dp"
+        android:padding="16dp"
+        android:textSize="19sp"
+        android:text="Servicios"/>
+
+    <Button
+        android:id="@+id/addService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Añadir"/>
 
     <TableLayout
         android:id="@+id/table"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title"
+        android:layout_marginTop="10dp"
         android:stretchColumns="*">
 
         <TableRow>
@@ -36,7 +38,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Nombre"
+                android:text="Servicio"
                 android:background="@drawable/border_cell"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textAlignment="center"
@@ -49,18 +51,28 @@
                 android:background="@drawable/border_cell"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textAlignment="center"
-                android:text="Correo"
+                android:text="Precio"
+                android:padding="10dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/border_cell"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textAlignment="center"
+                android:text="Pago"
                 android:padding="10dp" />
 
         </TableRow>
     </TableLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list_users"
+        android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/table"
-        tools:listitem="@layout/fragment_item_users"
-        app:layoutManager="LinearLayoutManager"/>
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/fragment_item_service" />
 
 </RelativeLayout>

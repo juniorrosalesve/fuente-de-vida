@@ -6,6 +6,9 @@ import android.content.Context;
 
 import com.conceptodigital.fuentedevida.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -19,7 +22,7 @@ import okhttp3.Response;
 
 public class Url {
     public boolean isLocal  =   true;
-    public String get   =   (isLocal) ? "http://192.168.0.107/api": "https://fuente-vida.conceptodigital.org/api";
+    public String get   =   (isLocal) ? "http://192.168.0.103/api": "https://fuente-vida.conceptodigital.org/api";
 
     public Dialog loading(Context context) {
         Dialog dialog = new Dialog(context, android.R.style.Theme_Translucent_NoTitleBar);
@@ -88,6 +91,14 @@ public class Url {
                 }
             }
         });
+    }
+    public String[] responseText(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            return new String[]{jsonObject.getString("status"), jsonObject.getString("message")};
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public interface MyCallback {
