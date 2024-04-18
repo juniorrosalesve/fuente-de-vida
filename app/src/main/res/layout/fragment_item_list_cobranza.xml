@@ -1,43 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
-    android:name="com.conceptodigital.fuentedevida.cobranza.CobranzaFragment"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".cobranza.CobranzaFragment">
+    android:id="@+id/fragment_container">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="21sp"
-        android:padding="10dp"
-        android:text="Consultar"/>
+    <!-- Aquí puedes añadir otros elementos de la interfaz de usuario si los necesitas -->
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/searchQueue"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:layout_below="@+id/title"
-        android:hint="Correo">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/queue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:background="#fff"
-        android:layout_below="@+id/searchQueue"
-        app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/fragment_item_cobranza"/>
-</RelativeLayout>
+</FrameLayout>

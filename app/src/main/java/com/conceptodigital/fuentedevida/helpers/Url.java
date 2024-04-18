@@ -22,7 +22,7 @@ import okhttp3.Response;
 
 public class Url {
     public boolean isLocal  =   true;
-    public String get   =   (isLocal) ? "http://192.168.0.103/api": "https://fuente-vida.conceptodigital.org/api";
+    public String get   =   (isLocal) ? "http://192.168.0.101/api": "https://fuente-vida.conceptodigital.org/api";
 
     public Dialog loading(Context context) {
         Dialog dialog = new Dialog(context, android.R.style.Theme_Translucent_NoTitleBar);

@@ -4,20 +4,40 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.conceptodigital.fuentedevida.cobranza.CobranzaFragment;
+import com.conceptodigital.fuentedevida.helpers.SessionManager;
 import com.conceptodigital.fuentedevida.services.ItemServiceFragment;
 import com.conceptodigital.fuentedevida.users.UsersFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class HomeActivity extends AppCompatActivity {
 
+    SessionManager sessionManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        sessionManager  =   new SessionManager(this);
+
+        Button btnLogout    =   findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sessionManager.setLogin(false,
+                        null, null, null, null, null);
+                Intent i    =   new Intent(HomeActivity.this, MainActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(mOnNavigationItemSelectedListener);

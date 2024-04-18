@@ -2,7 +2,7 @@
     <item
         android:id="@+id/item_cobranza"
         android:icon="@drawable/outline_monetization_on_24"
-        android:title="Cobranza" />
+        android:title="Consulta" />
     <item
         android:id="@+id/item_usuarios"
         android:icon="@drawable/outline_supervised_user_circle_24"

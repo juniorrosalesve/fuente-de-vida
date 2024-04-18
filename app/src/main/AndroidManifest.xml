@@ -16,6 +16,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".motorizado.MotoReporte"
+            android:exported="false" />
+        <activity
+            android:name=".motorizado.AgregarPago"
+            android:exported="false" />
+        <activity
+            android:name=".MotorActivity"
+            android:exported="false" />
+        <activity
             android:name=".HomeActivity"
             android:exported="false" />
         <activity

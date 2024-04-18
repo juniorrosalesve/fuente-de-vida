@@ -27,7 +27,6 @@
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="junior@admin.com"
             android:inputType="textEmailAddress"
             />
 
@@ -46,7 +45,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:text="12"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
