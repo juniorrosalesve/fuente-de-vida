@@ -1,15 +1,28 @@
 package com.conceptodigital.fuentedevida.users;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
+import android.provider.DocumentsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +35,8 @@ import com.conceptodigital.fuentedevida.R;
 import com.conceptodigital.fuentedevida.helpers.Url;
 import com.google.android.material.sidesheet.SideSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
+import com.permissionx.guolindev.PermissionX;
+import com.permissionx.guolindev.callback.RequestCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +44,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -41,14 +57,8 @@ public class UsersFragment extends Fragment {
     public RecyclerView recyclerView;
     private ArrayList<UserItem> users   =   new ArrayList<>();
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private static final int REQUEST_CODE_PDF = 1999;
 
-        if (getArguments() != null) {
-
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,6 +68,7 @@ public class UsersFragment extends Fragment {
         recyclerView    =   view.findViewById(R.id.list_users);
 
         Dialog loading =   url.loading(requireActivity());
+
         loading.show();
 
         url.sendGetRequest("/users", new Url.MyCallback() {
@@ -80,7 +91,14 @@ public class UsersFragment extends Fragment {
                                     int access = 0; // default value
                                     users.add(new UserItem(id, name, email, access));
                                 }
-                                recyclerView.setAdapter(new MyUsersRecyclerViewAdapter(users));
+                                recyclerView.setAdapter(new MyUsersRecyclerViewAdapter(users, new MyUsersRecyclerViewAdapter.OnItemClick() {
+                                    @Override
+                                    public void onItemClick(UserItem item) {
+                                        Intent i    =   new Intent(requireActivity(), VerUsuario.class);
+                                        i.putExtra("userId", item.id);
+                                        startActivity(i);
+                                    }
+                                }));
                             }
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
@@ -106,75 +124,12 @@ public class UsersFragment extends Fragment {
         addMotorizado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SideSheetDialog sideSheetDialog = new SideSheetDialog(requireActivity());
-                sideSheetDialog.setContentView(R.layout.side_add_motorizado);
-
-                // Obtén una referencia al botón dentro del diálogo
-                Button btnSubmit = sideSheetDialog.findViewById(R.id.btnSubmit);
-                TextInputEditText[] inputs   =   new TextInputEditText[] {
-                        sideSheetDialog.findViewById(R.id.nombre),
-                        sideSheetDialog.findViewById(R.id.correo),
-                        sideSheetDialog.findViewById(R.id.telefono),
-                        sideSheetDialog.findViewById(R.id.direccion),
-                        sideSheetDialog.findViewById(R.id.placa)
-                };
-
-                // Establece un OnClickListener para el botón
-                btnSubmit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        loading.show();
-                        for(int i = 0; i < inputs.length; i++)
-                        {
-                            if(inputs[i].getText().toString().isEmpty())
-                            {
-                                inputs[i].setError("Este campo es requerido");
-                                loading.dismiss();
-                                return;
-                            }
-                        }
-                        HashMap<String, String> params = new HashMap<>();
-                        params.put("nombre", inputs[0].getText().toString());
-                        params.put("correo", inputs[1].getText().toString());
-                        params.put("telefono", inputs[2].getText().toString());
-                        params.put("direccion", inputs[3].getText().toString());
-                        params.put("placa", inputs[4].getText().toString());
-                        url.sendPostRequest("/motorizado/add", params, new Url.MyCallback() {
-                            @Override
-                            public void onSuccess(String result) {
-                                String[] response   =   url.responseText(result);
-                                requireActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        loading.dismiss();
-                                        if(response[0].equals("success"))
-                                        {
-                                            users.add(new UserItem(response[1], inputs[0].getText().toString(), inputs[1].getText().toString(), 0));
-                                            recyclerView.getAdapter().notifyDataSetChanged();
-                                            sideSheetDialog.dismiss();
-                                        }
-                                        Toast.makeText(getContext(), response[1], Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onError(String error) {
-                                Log.e(TAG, error);
-                                requireActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        loading.dismiss();
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-
-                sideSheetDialog.show();
+                Intent i    =   new Intent(requireContext(), CrearUsuarioActivity.class);
+                startActivity(i);
             }
         });
+
+
 
         return view;
     }

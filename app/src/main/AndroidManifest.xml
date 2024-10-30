@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -10,11 +12,18 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher_fuente"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_fuente_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FuenteDeVida"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".users.VerUsuario"
+            android:exported="false" />
+        <activity
+            android:name=".users.CrearUsuarioActivity"
+            android:exported="false" />
         <activity
             android:name=".motorizado.MotoReporte"
             android:exported="false" />

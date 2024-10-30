@@ -15,9 +15,11 @@ import java.util.List;
 public class MyUsersRecyclerViewAdapter extends RecyclerView.Adapter<MyUsersRecyclerViewAdapter.ViewHolder> {
 
     private final List<UsersFragment.UserItem> mValues;
+    private OnItemClick onItemClick;
 
-    public MyUsersRecyclerViewAdapter(List<UsersFragment.UserItem> items) {
+    public MyUsersRecyclerViewAdapter(List<UsersFragment.UserItem> items, OnItemClick mOnItemClick) {
         mValues = items;
+        onItemClick = mOnItemClick;
     }
 
     @Override
@@ -32,11 +34,17 @@ public class MyUsersRecyclerViewAdapter extends RecyclerView.Adapter<MyUsersRecy
         holder.mItem = mValues.get(position);
         holder.mName.setText(mValues.get(position).name);
         holder.mEmail.setText(mValues.get(position).email);
+
+        holder.itemView.setOnClickListener(v -> onItemClick.onItemClick(holder.mItem));
     }
 
     @Override
     public int getItemCount() {
         return mValues.size();
+    }
+
+    public interface OnItemClick {
+        void onItemClick(UsersFragment.UserItem item);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
